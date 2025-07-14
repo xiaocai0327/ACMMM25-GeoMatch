@@ -19,7 +19,7 @@ from torch.utils.data import DataLoader
 gpu_ids: tuple = (0,1)
 config_img_size = 384
 config_model = 'convnext_large.fb_in22k_ft_in1k_384'
-checkpoint_start = "/mnt/hdd/cky/checkpoint_univisity/convnext_large.fb_in22k_ft_in1k_384/161257/weights_e3_0.0841.pth"
+checkpoint_start = "YOUR_PATH"
 output_dir = '/mnt/hdd/cky/CKimage/'
 
 batch_size_eval: int = 200
@@ -54,17 +54,15 @@ query_dataset_test_v = VigorDatasetEval_All(data_folder=data_folder_vigor ,
                                           img_type="query",
                                           same_area=True,      
                                           transforms=ground_transforms_val,
-                                          max_samples=10
                                           )
 dataset_size = len(query_dataset_test_v)
-print("使用的vigor数据集的大小：",dataset_size)
+print("Length of VIGOR",dataset_size)
     
 query_dataloader_test_v = DataLoader(query_dataset_test_v,
                                        batch_size = 96,
                                        num_workers = 32,
                                        shuffle=False,
                                        pin_memory=True)
-print("使用的vigor数据集的大小：",len(query_dataloader_test_v))
 
 
 val_transforms,_, _, _, _ = get_transforms_train_geomatch_u(
@@ -214,10 +212,10 @@ def process_query_dataset(model, dataloader, single_feature, device, topk=5, out
         ground_save_path = os.path.join(ground_match_dir, f"ground_{rank+1}_angle{angle}.jpg")
         cv2.imwrite(ground_save_path, cv2.cvtColor(crop_img, cv2.COLOR_RGB2BGR))
     
-    print(f"\n保存了 {len(best_matches)} 个匹配结果:")
+    print(f"\Save {len(best_matches)} results:")
     for rank, (sim, img_idx, angle) in enumerate(best_matches):
         sat_filename = os.path.splitext(os.path.basename(dataloader.dataset.idx2sat_path[dataloader.dataset.df_ground.iloc[img_idx]['sat']]))[0]
-        print(f"匹配 {rank+1}: 相似度 = {sim:.4f}, 卫星图 = {sat_filename}, 角度 = {angle}°")
+        print(f"match {rank+1}: sim = {sim:.4f}, sat_filename = {sat_filename}, angle = {angle}°")
     
     return best_matches
 

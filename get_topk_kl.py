@@ -52,14 +52,14 @@ query_dataset_test_v = VigorDatasetEval_All(data_folder=data_folder_vigor ,
                                           transforms=ground_transforms_val,
                                           )
 dataset_size = len(query_dataset_test_v)
-print("使用的vigor数据集的大小：",dataset_size)
+print("Length of VIGOR",dataset_size)
     
 query_dataloader_test_v = DataLoader(query_dataset_test_v,
                                        batch_size = 96,
                                        num_workers = 32,
                                        shuffle=False,
                                        pin_memory=True)
-print("使用的vigor数据集的大小：",len(query_dataloader_test_v))
+
 
 val_transforms,_, _, _, _ = get_transforms_train_geomatch_u(
         img_size,

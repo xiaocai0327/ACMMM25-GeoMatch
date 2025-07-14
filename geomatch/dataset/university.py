@@ -424,7 +424,7 @@ class U1652DatasetTrainGeomatch(Dataset):
         if not sat_files:
             raise ValueError(f"No satellite images found in {os.path.join(data_folder, '/train/satellite')}")
         if not drone_files:
-            print(f"警告: No drone images found in {os.path.join(data_folder, '/train/drone')}, using street images as fallback")
+            print(f"warning: No drone images found in {os.path.join(data_folder, '/train/drone')}, using street images as fallback")
         
 
         df_sat = pd.DataFrame({
@@ -454,10 +454,7 @@ class U1652DatasetTrainGeomatch(Dataset):
 
         unmapped_ground = df_ground["sat"].isna().sum()
         unmapped_drone = df_drone["sat"].isna().sum()
-        if unmapped_ground > 0:
-            print(f"警告: {unmapped_ground} 张街景图像无法匹配卫星")
-        if unmapped_drone > 0:
-            print(f"警告: {unmapped_drone} 张无人机图像无法匹配卫星")
+
         
         self.df_ground = df_ground
         self.df_drone = df_drone
@@ -512,7 +509,6 @@ class U1652DatasetTrainGeomatch(Dataset):
             drone_img = cv2.cvtColor(drone_img, cv2.COLOR_BGR2RGB)
         else:
             drone_img = query_img.copy()
-            print(f"警告: 地点 {location_id} 无无人机图像，使用街景替代")
             if np.random.random() < self.prob_flip:
                 drone_img = cv2.flip(drone_img, 1)
             elif np.random.random() < self.prob_rotate:
@@ -596,9 +592,9 @@ class U1652DatasetTrainGeomatch_5(Dataset):
         unmapped_ground = df_ground["sat"].isna().sum()
         unmapped_drone = df_drone["sat"].isna().sum()
         if unmapped_ground > 0:
-            print(f"警告: {unmapped_ground} 张街景图像无法匹配卫星")
+            print(f"Warning: {unmapped_ground} street view images cannot be matched to satellite")
         if unmapped_drone > 0:
-            print(f"警告: {unmapped_drone} 张无人机图像无法匹配卫星")
+            print(f"Warning: {unmapped_drone} drone images cannot be matched to satellite")
         
         self.df_ground = df_ground
         self.df_drone = df_drone
@@ -715,7 +711,7 @@ class U1652DatasetTrainGeomatch_5(Dataset):
             drone_img = cv2.cvtColor(drone_img, cv2.COLOR_BGR2RGB)
         else:
             drone_img = query_img.copy()
-            print(f"警告: 地点 {location_id} 无无人机图像，使用街景替代")
+            print(f"Warning: No drone images available for location {location_id}, using street view as a substitute")
             if np.random.random() < self.prob_flip:
                 drone_img = cv2.flip(drone_img, 1)
             elif np.random.random() < self.prob_rotate:
@@ -771,7 +767,7 @@ class U1652DatasetTrainGeomatch_g2g_d(Dataset):
         if not sat_files:
             raise ValueError(f"No satellite images found in {os.path.join(data_folder, '/train/satellite')}")
         if not drone_files:
-            print(f"警告: No drone images found in {os.path.join(data_folder, '/train/drone')}, using street images as fallback")
+            print(f" No drone images found in {os.path.join(data_folder, '/train/drone')}, using street images as fallback")
         
 
 
@@ -802,9 +798,9 @@ class U1652DatasetTrainGeomatch_g2g_d(Dataset):
         unmapped_ground = df_ground["sat"].isna().sum()
         unmapped_drone = df_drone["sat"].isna().sum()
         if unmapped_ground > 0:
-            print(f"警告: {unmapped_ground} 张街景图像无法匹配卫星")
+            print(f"Warning: {unmapped_ground} street view images cannot be matched to satellite")
         if unmapped_drone > 0:
-            print(f"警告: {unmapped_drone} 张无人机图像无法匹配卫星")
+            print(f"Warning: {unmapped_drone} drone images cannot be matched to satellite")
         
         self.df_ground = df_ground
         self.df_drone = df_drone
@@ -877,7 +873,7 @@ class U1652DatasetTrainGeomatch_g2g_d(Dataset):
             drone_img = cv2.cvtColor(drone_img, cv2.COLOR_BGR2RGB)
         else:
             drone_img = query_img.copy()
-            print(f"警告: 地点 {location_id} 无无人机图像，使用街景替代")
+            print(f"Warning: No drone images available for location {location_id}, using street view as a substitute")
             if np.random.random() < self.prob_flip:
                 drone_img = cv2.flip(drone_img, 1)
             elif np.random.random() < self.prob_rotate:
@@ -978,9 +974,9 @@ class U1652DatasetTrainGeomatch_5_google(Dataset):
         unmapped_ground = df_ground["sat"].isna().sum()
         unmapped_drone = df_drone["sat"].isna().sum()
         if unmapped_ground > 0:
-            print(f"警告: {unmapped_ground} 张街景图像无法匹配卫星")
+            print(f"Warning: {unmapped_ground} street view images cannot be matched to satellite")
         if unmapped_drone > 0:
-            print(f"警告: {unmapped_drone} 张无人机图像无法匹配卫星")
+            print(f"Warning: {unmapped_drone} drone images cannot be matched to satellite")
         
         self.df_ground = df_ground
         self.df_drone = df_drone
@@ -1182,7 +1178,7 @@ class U1652DatasetTrainGeomatch_vigor(Dataset):
         unmapped_ground = df_ground["sat"].isna().sum()
         # unmapped_drone = df_drone["sat"].isna().sum()
         if unmapped_ground > 0:
-            print(f"警告: {unmapped_ground} 张街景图像无法匹配卫星")
+            print(f"Warning: {unmapped_ground} street view images could not be matched to satellite.")
 
         
         self.df_ground = df_ground
@@ -1208,9 +1204,6 @@ class U1652DatasetTrainGeomatch_vigor(Dataset):
         self.shuffle_batch_size = shuffle_batch_size
         self.shuffle()
         
-
-        # missing_drones = sum(1 for loc in set(self.idx2location.values()) if loc not in self.drone_location_indices)
-        # print(f"Missing drone locations: {missing_drones}/{len(set(self.idx2location.values()))}")
     
     def shuffle(self, sim_dict=None, neighbour_select=8, neighbour_range=16):
         print("\nShuffle Dataset:")
@@ -1334,7 +1327,7 @@ class U1652DatasetTrainGeomatchvigor_s(Dataset):
         unmapped_ground = df_ground["sat"].isna().sum()
 
         if unmapped_ground > 0:
-            print(f"警告: {unmapped_ground} 张街景图像无法匹配卫星")
+            print(f"Warning: {unmapped_ground} street view images could not be matched to satellite.")
  
         self.df_ground = df_ground
 
@@ -1415,7 +1408,7 @@ def select_google(data_folder=None,rand = 1.0):
     rand = 0.15
     test_ground_files = sorted(glob.glob(os.path.join(data_folder, "train", "google_ss", "*", "*.jpg")))
     if not test_ground_files:
-        print(f"警告: 未在 {os.path.join(data_folder, 'train/google_ss')} 找到谷歌街景图像")
+        print(f"Warning: No Google Street View images found in {os.path.join(data_folder, 'train/google_ss')}")
 
     ground_by_location = defaultdict(list)
     for f in test_ground_files:
@@ -1426,7 +1419,7 @@ def select_google(data_folder=None,rand = 1.0):
     all_location_ids = list(ground_by_location.keys())
     num_select = max(1, int(len(all_location_ids) * rand))  
     selected_location_ids = random.sample(all_location_ids, num_select)
-    print(f"谷歌数据集总 location_id: {len(all_location_ids)}, 选中的 location_id: {len(selected_location_ids)}")
+    print(f"Total location_ids in Google dataset: {len(all_location_ids)}, Selected location_ids: {len(selected_location_ids)}")
 
     selected_ground_files = []
 

@@ -128,8 +128,6 @@ if __name__ == '__main__':
         model_state_dict = torch.load(config.checkpoint_start)  
         model.load_state_dict(model_state_dict, strict=False)     
 
-    # change_ft
-    print("冻结 Stage 1、Stage 2 的参数...")
     for name, param in model.named_parameters():
         if 'stages.0' in name or 'stages.1' in name:
             param.requires_grad = False
