@@ -9,7 +9,7 @@ To obtain more training samples, we use a probabilistic embedding mechanism base
 
 ### 1. Auxiliary Sample Collection
 
-#### Cosine Similarity-based Data Select
+#### Cosine Similarity-based Data Collection
 ```bash
 python get_topk_cos.py
 ```
@@ -18,7 +18,7 @@ python get_topk_cos.py
 python train_kl.py
 ```
 
-#### KL Divergence-based Data Select
+#### KL Divergence-based Data Collection
 ```bash
 python get_topk_kl.py
 ```
@@ -34,3 +34,7 @@ python train_university.py
 ```bash
 python train_geomatch_vigor.py
 ```
+
+[Weights](https://1drv.ms/u/c/14077d7f8d867acd/EdyGV7Y1wjlLtPMBuqq9lh4BeDCnoYC7BQpLhbhsvDta_A?e=ECuR4S)
+
+
