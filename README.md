@@ -25,7 +25,7 @@ python get_topk_kl.py
 
 ### 2. Model Training
 
-#### Training on University-1652 or Pre-training VIGOR<sub>aux</sub>
+#### Training on University-1652 or VIGOR<sub>aux</sub>
 ```bash
 python train_university.py
 ```
