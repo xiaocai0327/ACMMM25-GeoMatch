@@ -9,26 +9,25 @@ To obtain more training samples, we use a probabilistic embedding mechanism base
 
 ### 1. Auxiliary Sample Collection
 
-#### Cosine Similarity-based Retrieval
+#### Cosine Similarity-based Data Select
 ```bash
 python get_topk_cos.py
 ```
+#### KL Divergence Training
+```bash
+python train_kl.py
+```
 
-#### KL Divergence-based Retrieval
+#### KL Divergence-based Data Select
 ```bash
 python get_topk_kl.py
 ```
 
 ### 2. Model Training
 
-#### Training on University-1652 or Pre-training VIGORaux
+#### Training on University-1652 or Pre-training VIGOR<sub>aux</sub>
 ```bash
 python train_university.py
-```
-
-#### KL Divergence Training
-```bash
-python train_kl.py
 ```
 
 #### Pre-training on VIGOR (Ablation Study)
