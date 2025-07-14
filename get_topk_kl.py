@@ -1,26 +1,21 @@
 from torch.utils.data import DataLoader
 import os
-import time
-import math
 import shutil
-import sys
 import torch
 from dataclasses import dataclass
 from torch.cuda.amp import GradScaler
-from torch.utils.data import DataLoader
 from tqdm import tqdm
-from congeo.dataset.university import  get_transforms_train_congeo as get_transforms_train_congeo_u
-from congeo.transforms import get_transforms_val
-import os
+from geomatch.dataset.university import  get_transforms_train_geomatch as get_transforms_train_geomatch_u
+from geomatch.transforms import get_transforms_val
 import cv2
 import numpy as np
 import pandas as pd
-import torch
 from torch.utils.data import Dataset
-from tem import ConvNextProbabilisticEmbedding
-
+from train_kl import ConvNextProbabilisticEmbedding
+from geomatch.transforms import get_transforms_train_geomatch, get_transforms_val
+from geomatch.dataset.vigor import VigorDatasetEval,VigorDatasetEval_All
 from PIL import Image
-
+import heapq
 
 img_size = (512,512)
 config_model = 'convnext_large.fb_in22k_ft_in1k_384'
@@ -39,8 +34,7 @@ model = model.to(device)
 mean=[0.485, 0.456, 0.406]
 std=[0.229, 0.224, 0.225]
 
-from congeo.transforms import get_transforms_train_congeo, get_transforms_val
-from congeo.dataset.vigor import VigorDatasetEval,VigorDatasetEval_All, VigorDatasetTrainConGeo,VigorDatasetTrainConGeo_All
+
 data_folder_vigor = "/mnt/hdd/lx/VIGOR/"
 image_size_sat = (512, 512)
 new_width = 512*2    
@@ -67,7 +61,7 @@ query_dataloader_test_v = DataLoader(query_dataset_test_v,
                                        pin_memory=True)
 print("使用的vigor数据集的大小：",len(query_dataloader_test_v))
 
-val_transforms,_, _, _, _ = get_transforms_train_congeo_u(
+val_transforms,_, _, _, _ = get_transforms_train_geomatch_u(
         img_size,
         img_size, 
         mean=mean, 
@@ -217,13 +211,7 @@ single_mu, single_sigma = get_single_image_features(
 )
 
 
-import cv2
-import numpy as np
-import torch
-from tqdm import tqdm
-import os
-import heapq
-from torch.utils.data import DataLoader
+
 
 def crop_panorama(img, fov=90, stride=45):
 

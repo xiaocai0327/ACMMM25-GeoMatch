@@ -6,8 +6,8 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 import os
-from congeo.dataset.university import get_transforms_train_congeo
-from congeo.dataset.university import U1652DatasetEval
+from geomatch.dataset.university import get_transforms_train_geomatch
+from geomatch.dataset.university import U1652DatasetEval
 class ConvNextProbabilisticEmbedding(nn.Module):
     def __init__(self, model_name="convnext_large", embed_dim=512, weight_path=None):
         super().__init__()
@@ -15,9 +15,8 @@ class ConvNextProbabilisticEmbedding(nn.Module):
         if weight_path:
             state_dict = torch.load(weight_path)
             self.base_model.load_state_dict(state_dict, strict=False)
-            print(f"已加载自定义权重: {weight_path}")
         feature_dim = self.base_model(torch.randn(1, 3, 224, 224)).shape[1]
-        print(f"特征维度: {feature_dim}")
+        print(f"feature_dim: {feature_dim}")
         self.mu_head = nn.Sequential(
             nn.Linear(feature_dim, 1024),
             nn.LayerNorm(1024),
@@ -89,7 +88,7 @@ def train_university_distribution(data_dir, save_dir, config):
     save_path = os.path.join(save_dir, "university_ground_embedder.pth")
     
     img_size = (config['image_size'], config['image_size'])
-    val_transforms,_, _, _, _ = get_transforms_train_congeo(
+    val_transforms,_, _, _, _ = get_transforms_train_geomatch(
         img_size,
         img_size, 
         mean=[0.485, 0.456, 0.406], 
@@ -131,9 +130,7 @@ def train_university_distribution(data_dir, save_dir, config):
         verbose=True
     )
 
-    print(f"开始训练University-1652分布模型, 共 {config['epochs']} 个周期...")
-    print(f"训练样本数量: {len(dataset)}")
-    print(f"批次大小: {config['batch_size']}")
+    print(f"Train start, with{config['epochs']} epoch.")
     
     best_loss = float('inf')
     for epoch in range(config['epochs']):
@@ -163,14 +160,14 @@ def train_university_distribution(data_dir, save_dir, config):
         avg_epoch_loss = epoch_loss / len(data_loader)
         scheduler.step(avg_epoch_loss)
         
-        print(f"Epoch {epoch+1} 完成 | 平均损失: {avg_epoch_loss:.4f}")
+        print(f"Epoch {epoch+1} finish |avgloss: {avg_epoch_loss:.4f}")
         save_path = os.path.join(save_dir, 'weights_e{}_{:.4f}.pth'.format(epoch, avg_epoch_loss ))
         if avg_epoch_loss < best_loss:
             best_loss = avg_epoch_loss
             torch.save(model.state_dict(), save_path)
-            print(f"模型保存至 {save_path}")
+            print(f"save model to {save_path}")
     
-    print("训练完成!")
+    print("Train over!")
     return model, best_loss
 
 
@@ -197,4 +194,4 @@ if __name__ == "__main__":
         config=config
     )
     
-    print(f"训练完成，最低损失: {best_loss:.4f}")
+    print(f"train over,best_loss: {best_loss:.4f}")

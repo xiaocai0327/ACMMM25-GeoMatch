@@ -8,15 +8,13 @@ from dataclasses import dataclass
 from torch.cuda.amp import GradScaler
 from torch.utils.data import DataLoader
 from transformers import get_constant_schedule_with_warmup, get_polynomial_decay_schedule_with_warmup, get_cosine_schedule_with_warmup
-
-from congeo.dataset.university import U1652DatasetEval, get_transforms_train_congeo,U1652DatasetTrainConGeo_5
-from congeo.utils import setup_system, Logger
-from congeo.trainer import train,train_contrast_congeo,train_contrast_congeo_5,train_contrast_congeo_11
-from congeo.evaluate.university import evaluate
-# from congeo.evaluate.rerank2 import evaluate
-from congeo.loss import InfoNCE
-from congeo.model import TimmModel
-from congeo.model import TimmModel_ConGeo,TimmModel_ConGeo_5
+from geomatch.dataset.university import U1652DatasetEval, get_transforms_train_geomatch,U1652DatasetTrainGeomatch_5
+from geomatch.utils import setup_system, Logger
+from geomatch.trainer import train,train_contrast_geomatch,train_contrast_geomatch_5,train_contrast_geomatch_11
+from geomatch.evaluate.university import evaluate
+from geomatch.loss import InfoNCE
+from geomatch.model import TimmModel
+from geomatch.model import TimmModel_Geomatch,TimmModel_Geomatch_5
 
 @dataclass
 class Configuration:
@@ -91,7 +89,7 @@ if config.dataset == 'U1652-D2S':
 
 if __name__ == '__main__':
     from torch.utils.tensorboard import SummaryWriter
-    writer = SummaryWriter(log_dir=os.path.join("/home/caikaiyan/ConGeo-lx/", 'tensorboard'))
+    writer = SummaryWriter(log_dir=os.path.join("/home/caikaiyan/geomatch-lx/", 'tensorboard'))
     model_path = "{}/{}/{}".format(config.model_path,
                                        config.model,
                                        time.strftime("%H%M%S"))
@@ -109,7 +107,7 @@ if __name__ == '__main__':
     print("\nModel: {}".format(config.model))
 
 
-    model = TimmModel_ConGeo_5(config.model,
+    model = TimmModel_Geomatch_5(config.model,
                           pretrained=False,
                           img_size=config.img_size)
     
@@ -154,13 +152,13 @@ if __name__ == '__main__':
     #-----------------------------------------------------------------------------#
     # DataLoader                                                                  #
     #-----------------------------------------------------------------------------#
-    val_transforms,satellite_transforms, satellite_transforms_con, street_transforms, street_transforms_con = get_transforms_train_congeo(
+    val_transforms,satellite_transforms, satellite_transforms_con, street_transforms, street_transforms_con = get_transforms_train_geomatch(
         img_size,
         img_size, 
         mean=mean, 
         std=std)
 
-    train_dataset = U1652DatasetTrainConGeo_5(
+    train_dataset = U1652DatasetTrainGeomatch_5(
             data_folder=config.data_folder,  
             transforms_query = street_transforms,  
             transforms_drone = street_transforms_con,  
@@ -307,7 +305,7 @@ if __name__ == '__main__':
         print("\n{}[Epoch: {}]{}".format(30*"-", epoch, 30*"-"))
         
 
-        train_loss = train_contrast_congeo_11(config,
+        train_loss = train_contrast_geomatch_11(config,
                            model,
                            dataloader=train_dataloader,
                            loss_function=loss_function,
